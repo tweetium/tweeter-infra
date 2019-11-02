@@ -1,0 +1,15 @@
+version: "3.2"
+
+services:
+  tweeter-ansible:
+    container_name: ansible
+    build: ./
+    environment:
+      ANSIBLE_CONFIG: /ansible/ansible.cfg
+      ANSIBLE_INVENTORY: /ansible/hosts.yaml
+    volumes:
+      - .:/ansible
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    working_dir: /ansible
+    # Keep container open
+    command: tail -F /ansible/ansible.cfg
