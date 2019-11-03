@@ -1,0 +1,14 @@
+---
+- name: grafana - create storage volume
+  docker_volume:
+    name: grafana-storage
+
+- name: grafana - start container
+  docker_container:
+    name: grafana
+    image: grafana/grafana:6.0.2
+    state: started
+    restart: yes
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    ports: 3000:3000

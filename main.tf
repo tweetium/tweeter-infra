@@ -11,12 +11,17 @@ resource "digitalocean_droplet" "main" {
   ssh_keys = var.do_ssh_keys
 
   provisioner "remote-exec" {
-    inline = ["sudo dnf -y install python"]
-
+    inline = ["true"]
     connection {
-      type        = "ssh"
-      user        = "fedora"
-      private_key = "${file(var.ssh_key_private)}"
+      type = "ssh"
+      user = "root"
+      host = "${self.ipv4_address}"
+      private_key = "${file("/root/.ssh/id_rsa")}"
     }
+  }
+
+  provisioner "local-exec" {
+    # Extra comma is necessary for inventory (comma separated list)
+    command = "ansible-playbook --inventory '${self.ipv4_address},' playbooks/main.yml"
   }
 }
