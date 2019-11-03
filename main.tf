@@ -1,6 +1,6 @@
 provider "digitalocean" {
   version = "~> 1.6"
-  token   = var.do_token
+  token   = "${var.do_token}"
 }
 
 resource "digitalocean_droplet" "main" {
@@ -8,7 +8,7 @@ resource "digitalocean_droplet" "main" {
   image    = "ubuntu-18-04-x64"
   region   = "sfo2"
   size     = "s-1vcpu-1gb"
-  ssh_keys = var.do_ssh_keys
+  ssh_keys = "${var.do_ssh_keys}"
 
   provisioner "remote-exec" {
     inline = ["true"]
