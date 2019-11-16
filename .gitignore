@@ -1,0 +1,16 @@
+#  Local .terraform directories
+**/.terraform/*
+.terraform
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+# vscode workspace configuration
+.vscode
+
+# Ansible retry files
+*.retry

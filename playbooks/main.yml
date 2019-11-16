@@ -1,0 +1,12 @@
+- hosts: all
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  pre_tasks:
+    # apt-get update required to find deps like python-pip in package lists
+    - name: Run 'apt-get update'
+      apt:
+        update_cache: true
+
+  roles:
+    - grafana
