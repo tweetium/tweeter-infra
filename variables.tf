@@ -1,5 +1,7 @@
+# The digital ocean personal access token
+# used for provisioning / API access.
 variable "do_token" {}
 
-variable "do_ssh_keys" {
-  default = [25167441, 25167444]
-}
+# The SSH keys to add to the digital ocean instances,
+# used for ansible access to configure.
+variable "do_ssh_keys" {}
