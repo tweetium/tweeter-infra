@@ -1,6 +1,6 @@
 # tweeter-infra
 
-## Pre-requisites
+### Pre-requisites
 Requires a `secrets.auto.tfvars` file located in this directory with:
 ```
 # Place your digital ocean API personal access token here.
@@ -20,8 +20,15 @@ docker-compose up -d
 docker-compose exec tweeter-infra bash
 ```
 
-## Provisioning
-Inside the container, run:
+## Working with Production
+First, cd into the `production` folder and initialize terraform:
+```
+cd production
+terraform init
+```
+
+### Provisioning
+To provision the infrastructure, run:
 ```
 terraform apply
 ```
@@ -31,7 +38,7 @@ The current infrastructure is static and does not do any dynamic updates to chan
 To change the infrastructure, the current process is to destroy and re-create the infrastructure.
 
 ## Destroy
-To destroy the infrastructure, run this command inside the container:
+To destroy the infrastructure, run:
 ```
 terraform destroy
 ```

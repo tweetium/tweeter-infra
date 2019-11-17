@@ -34,6 +34,6 @@ resource "digitalocean_volume_attachment" "main" {
 
   provisioner "local-exec" {
     # Extra comma is necessary for inventory (comma separated list)
-    command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' playbooks/main.yml"
+    command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' ../playbooks/main.yml"
   }
 }
