@@ -11,7 +11,9 @@ do_ssh_keys = [XXXXXXX, XXXXXXX]
 
 Also requires Docker installed, see: https://docs.docker.com/v17.09/engine/installation/.
 
-All commands to interact with the infrastructure require that you build and connect to the docker-compose configuration located at the top-level of the project.
+All commands to interact with the infrastructure (except for spinning up the infrastructure
+locally) require that you build and connect to the docker-compose configuration located
+at the top-level of the project.
 ```
 # Start the docker-compose environment
 docker-compose up -d
@@ -20,7 +22,17 @@ docker-compose up -d
 docker-compose exec tweeter-infra bash
 ```
 
-## Working with Production
+## Working with the Local environment
+We manage the local environment via docker-compose, therefore you should not be inside
+the docker container which you would use for working with other environments.
+
+All you need to do is cd in the `local` folder and docker-compose up.
+```
+cd local
+docker-compose up -d
+```
+
+## Working with the Production environment
 First, cd into the `production` folder and initialize terraform:
 ```
 cd production
