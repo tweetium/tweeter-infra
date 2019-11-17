@@ -1,6 +1,8 @@
 - hosts: all
   vars:
     ansible_python_interpreter: /usr/bin/python3
+    do_volumes:
+      - name: main
 
   pre_tasks:
     # apt-get update required to find deps like python-pip in package lists
@@ -9,4 +11,5 @@
         update_cache: true
 
   roles:
+    - do_mount_volume
     - grafana
