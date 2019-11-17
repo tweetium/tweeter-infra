@@ -8,6 +8,9 @@
     # apt-get update required to find deps like python-pip in package lists
     - name: Run 'apt-get update'
       apt:
+        # Install python-pip here instead of waiting for
+        # pip role to install, it's slightly faster (~10 secs)
+        name: python-pip
         update_cache: true
 
   roles:
