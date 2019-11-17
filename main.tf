@@ -4,9 +4,9 @@ provider "digitalocean" {
 }
 
 resource "digitalocean_volume" "main" {
-  name                     = "main"
-  region                   = "sfo2"
-  size                     = 1
+  name   = "main"
+  region = "sfo2"
+  size   = 1
 }
 
 resource "digitalocean_droplet" "main" {
