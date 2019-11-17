@@ -1,0 +1,16 @@
+---
+- name: Format the volume
+  command: sudo mkfs.ext4 /dev/disk/by-id/scsi-0DO_Volume_{{ item.name }}
+  loop: "{{ do_volumes }}"
+
+- name: Create a mount point for volume
+  command: mkdir -p /mnt/{{ item.name }}
+  loop: "{{ do_volumes }}"
+
+- name: Mount volume at mount point
+  command: mount -o discard,defaults,noatime /dev/disk/by-id/scsi-0DO_Volume_{{ item.name }} /mnt/{{ item.name }}
+  loop: "{{ do_volumes }}"
+
+- name: Register remounting command after reboot
+  command: echo '/dev/disk/by-id/scsi-0DO_Volume_{{ item.name }} /mnt/{{ item.name }} ext4 defaults,nofail,discard 0 0' | sudo tee -a /etc/fstab
+  loop: "{{ do_volumes }}"
