@@ -1,9 +1,4 @@
 - hosts: all
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-    do_volumes:
-      - name: main
-
   pre_tasks:
     # apt-get update required to find deps like python-pip in package lists
     - name: Run 'apt-get update'
@@ -14,5 +9,32 @@
         update_cache: true
 
   roles:
+    - docker
+
+  post_tasks:
+    - name: Create tweeter network
+      docker_network:
+        name: tweeter
+
+
+# After network is installed
+- hosts: all
+  vars:
+    do_volumes:
+      - name: main
+    postgres_instances:
+      - name: tweeter-backend-postgres
+        port: 8001
+        networks:
+          - name: tweeter
+    tweeter_backend_instances:
+      - name: tweeter-backend
+        port: 8000
+        networks:
+          - name: tweeter
+
+  roles:
     - do_mount_volume
     - grafana
+    - postgres
+    - tweeter-backend

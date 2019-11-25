@@ -33,7 +33,8 @@ resource "digitalocean_volume_attachment" "main" {
   }
 
   provisioner "local-exec" {
-    # Extra comma is necessary for inventory (comma separated list)
-    command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' ../playbooks/main.yml"
+    # Extra comma in inventory is necessary for inventory (comma separated list)
+    # ansible_python_interpretor is necessary because of Ubuntu Xenial: https://github.com/ansible/ansible/issues/19605
+    command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3' ../playbooks/main.yml"
   }
 }
