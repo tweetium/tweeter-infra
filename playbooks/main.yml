@@ -22,19 +22,37 @@
   vars:
     do_volumes:
       - name: main
-    postgres_instances:
+    docker_volumes:
+      - name: grafana-data
+      - name: postgres-data
+    docker_containers:
+      - name: grafana
+        image: grafana/grafana:6.0.2
+        volumes:
+          - grafana-data:/var/lib/grafana
+        networks:
+          - name: tweeter
       - name: tweeter-backend-postgres
-        port: 8001
+        image: postgres:11.1
+        volumes:
+          - postgres-data:/var/lib/postgresql/data
         networks:
           - name: tweeter
-    tweeter_backend_instances:
       - name: tweeter-backend
-        port: 8000
+        image: tweetium/tweeter-backend:latest
+        volumes:
+          - grafana-data:/var/lib/grafana
+        ports:
+          - 8000:80
         networks:
           - name: tweeter
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@tweeter-backend-postgres:5432/postgres?sslmode=disable
+          # JWT is used for user sessions, this map is defined for JWT rotation.
+          JWT_SECRETS_MAP: |
+            { "0": "4e054f2e-7436-4525-8fc6-d5801d483697" }
+          JWT_SECRETS_CURRENT_KEY: "0"
 
   roles:
     - do_mount_volume
-    - grafana
-    - postgres
-    - tweeter-backend
+    - tweeter-docker-services
