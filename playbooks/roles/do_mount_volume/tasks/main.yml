@@ -1,4 +1,5 @@
 ---
+# TODO: use filesystem module instead of raw commands
 - name: Format the volume
   command: sudo mkfs.ext4 /dev/disk/by-id/scsi-0DO_Volume_{{ item.name }}
   loop: "{{ do_volumes }}"
