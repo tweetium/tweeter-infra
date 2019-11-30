@@ -54,5 +54,5 @@
           JWT_SECRETS_CURRENT_KEY: "0"
 
   roles:
-    - do_mount_volume
+    - do-mount-volume
     - tweeter-docker-services
