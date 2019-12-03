@@ -38,3 +38,9 @@ resource "digitalocean_volume_attachment" "main" {
     command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3' ../playbooks/main.yml"
   }
 }
+
+resource "digitalocean_project" "project" {
+  name        = "tweeter-${terraform.workspace}"
+  environment = "Development"
+  resources   = [digitalocean_droplet.main.urn, digitalocean_volume.main.urn]
+}
