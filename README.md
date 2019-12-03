@@ -32,12 +32,23 @@ cd local
 docker-compose up -d
 ```
 
-## Working with the Production environment
-First, cd into the `production` folder and initialize terraform:
+## Working with the Remote environment
+First, cd into the `remote` folder and initialize terraform:
 ```
-cd production
+cd remote
 terraform init
 ```
+
+### Using workspaces
+We use workspaces to manage separate versions of the application deployed to the remote backend. To start with, you can create your own personal workspace:
+```
+# Use your own name here
+terraform workspace new [darren]
+```
+
+### Special workspaces
+We currently have one special workspace named `production`. Running changes
+on this workspace means changing the application exposed for the public.
 
 ### Provisioning
 To provision the infrastructure, run:
