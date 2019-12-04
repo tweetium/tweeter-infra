@@ -9,12 +9,17 @@ resource "digitalocean_volume" "main" {
   size   = 1
 }
 
+resource "digitalocean_ssh_key" "main" {
+  name       = "${var.do_ssh_key_name}"
+  public_key = file("/root/.ssh/id_rsa.pub")
+}
+
 resource "digitalocean_droplet" "main" {
   name     = "main"
   image    = "ubuntu-18-04-x64"
   region   = "sfo2"
   size     = "s-1vcpu-1gb"
-  ssh_keys = "${var.do_ssh_keys}"
+  ssh_keys = ["${digitalocean_ssh_key.main.fingerprint}"]
 }
 
 resource "digitalocean_volume_attachment" "main" {
