@@ -32,6 +32,14 @@ cd local
 docker-compose up -d
 ```
 
+### Updating the image (pulling `latest`)
+To get the latest version pushed to DockerHub, use:
+```
+docker-compose pull
+```
+
+Or, if you want to use a custom version on DockerHub or even in your local images, you can change the tag in the docker-compose.yml file directly.
+
 ## Working with the Remote environment
 First, cd into the `remote` folder and initialize terraform:
 ```
