@@ -1,0 +1,27 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@0.5.19
+  dockerize: ganta/dockerize@1.3.2
+
+jobs:
+  check-healthcheck-on-local:
+    machine: true
+    steps:
+      - checkout
+      - run: cd local; docker-compose up -d
+      # These lines are for debugging in case a container died
+      - run: cd local; docker-compose ps
+      - run: cd local; docker-compose logs
+      - docker/install-dockerize
+      # Wait for server to accept a connection before running tests
+      - dockerize/wait-http:
+          host: localhost
+          path: /healthcheck
+          port: 8000
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - check-healthcheck-on-local
