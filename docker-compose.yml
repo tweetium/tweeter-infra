@@ -9,7 +9,7 @@ services:
       ANSIBLE_INVENTORY: /ansible/hosts.yaml
     volumes:
       - .:/ansible
-      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+      - ~/.ssh:/root/.ssh
     working_dir: /ansible
     # Keep container open
     command: tail -F /ansible/ansible.cfg
