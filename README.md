@@ -1,12 +1,18 @@
 # tweeter-infra
 
 ### Pre-requisites
+Requires a private / public key pair located at `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub`.
+You can generate your public key into a file via the command:
+```
+ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+```
+
 Requires a `secrets.auto.tfvars` file located in this directory with:
 ```
 # Place your digital ocean API personal access token here.
 do_token = "XXXXXXXXX"
-# Place your digital ocean ssh key ids here so they are added to the machines.
-do_ssh_keys = [XXXXXXX, XXXXXXX]
+# Name your key identifier which is stored in DigitalOcean.
+do_ssh_key_name = "darren"
 ```
 
 Also requires Docker installed, see: https://docs.docker.com/v17.09/engine/installation/.
