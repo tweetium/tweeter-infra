@@ -21,7 +21,7 @@
 - hosts: all
   vars:
     do_volumes:
-      - name: main
+      - name: "{{ terraform_workspace}}-main"
     docker_volumes:
       - name: grafana-data
       - name: postgres-data
@@ -43,7 +43,7 @@
         volumes:
           - grafana-data:/var/lib/grafana
         ports:
-          - 8000:80
+          - 80:80
         networks:
           - name: tweeter
         env:
