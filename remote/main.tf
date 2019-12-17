@@ -57,18 +57,8 @@ provider "cloudflare" {
   api_token = "${var.cf_token}"
 }
 
-# Requires a zone to exist in the Cloudflare account named `var.cf_zone`.
-# This zone is not managed by terraform because we share it between workspaces.
-data "cloudflare_zones" "main" {
-  filter {
-    name   = "${var.cf_zone}"
-    status = "active"
-    paused = false
-  }
-}
-
 resource "cloudflare_record" "main" {
-  zone_id = "${lookup(data.cloudflare_zones.main.zones[0], "id")}"
+  zone_id = var.cf_zone_id
   name    = "${terraform.workspace}"
   value   = "${digitalocean_droplet.main.ipv4_address}"
   type    = "A"

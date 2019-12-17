@@ -29,7 +29,7 @@ jobs:
       # does not inherit environment variables
       - run: echo "do_token = \"$TF_VAR_do_token\"" >> remote/secrets.auto.tfvars
       - run: echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> remote/secrets.auto.tfvars
-      - run: echo "cf_zone = \"$TF_VAR_cf_zone\"" >> remote/secrets.auto.tfvars
+      - run: echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> remote/secrets.auto.tfvars
       - run: echo "cf_token = \"$TF_VAR_cf_token\"" >> remote/secrets.auto.tfvars
       # Get the public ssh key in a file so we can add to new hosts
       - run: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub

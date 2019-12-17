@@ -10,8 +10,11 @@ variable "cf_token" {
   description = "The Cloudflare access token used for API access."
 }
 
-# This is roughly equivalent to the domain you purchased:
-# `tweeter.dev` in my case.
-variable "cf_zone" {
-  description = "The zone that will be used for said exposed subdomains^."
+# Requires a zone to exist in the Cloudflare account named `var.cf_zone`.
+# This zone is not managed by terraform because we share it between workspaces.
+#
+# This is better than looking up the zone id by name via terraform, because it requires
+# less permissions for the API token.
+variable "cf_zone_id" {
+  description = "The zone id for the domain managed by Cloudflare. Used for exposing new infrastructure via subdomains."
 }
