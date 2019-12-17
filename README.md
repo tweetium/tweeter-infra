@@ -7,13 +7,9 @@ You can generate your public key into a file via the command:
 ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 ```
 
-Requires a `secrets.auto.tfvars` file located in this directory with:
-```
-# Place your digital ocean API personal access token here.
-do_token = "XXXXXXXXX"
-# Name your key identifier which is stored in DigitalOcean.
-do_ssh_key_name = "darren"
-```
+Requires a `secrets.auto.tfvars` file located in `remote` directory populated with
+values to be used via terraform. See `remote/variables.tf` for a full list and
+description.
 
 Also requires Docker installed, see: https://docs.docker.com/v17.09/engine/installation/.
 
@@ -63,6 +59,19 @@ terraform workspace new [darren]
 ### Special workspaces
 We currently have one special workspace named `production`. Running changes
 on this workspace means changing the application exposed for the public.
+
+### Importing resources for new workspaces
+When you create a new workspace, you may run into errors when running `terraform apply`.
+This is due to some resources being shared between workspaces. Unfortunately
+the process to resolve this is manual.
+
+You must import these resources into the terraform state. Please see comments on
+the resource definition on how to get the identifier for importing the item.
+
+Generally the syntax is:
+```
+terraform import [digitalocean_ssh_key.main] [XXXXXX]
+```
 
 ### Provisioning
 To provision the infrastructure, run:
