@@ -3,6 +3,10 @@ provider "digitalocean" {
   token   = "${var.do_token}"
 }
 
+data "digitalocean_image" "main" {
+  name = "${terraform.workspace}-main"
+}
+
 resource "digitalocean_volume" "main" {
   name   = "${terraform.workspace}-main"
   region = "sfo2"
@@ -18,7 +22,7 @@ resource "digitalocean_ssh_key" "main" {
 
 resource "digitalocean_droplet" "main" {
   name     = "${terraform.workspace}-main"
-  image    = "ubuntu-18-04-x64"
+  image    = data.digitalocean_image.main.id
   region   = "sfo2"
   size     = "s-1vcpu-1gb"
   ssh_keys = ["${digitalocean_ssh_key.main.fingerprint}"]
