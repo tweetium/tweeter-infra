@@ -7,8 +7,8 @@ You can generate your public key into a file via the command:
 ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 ```
 
-Requires a `secrets.auto.tfvars` file located in `remote` directory populated with
-values to be used via terraform. See `remote/variables.tf` for a full list and
+Requires a `secrets.auto.tfvars` file located in project directory populated with
+values to be used via terraform. See `./variables.tf` for a full list and
 description.
 
 Also requires Docker installed, see: https://docs.docker.com/v17.09/engine/installation/.
@@ -24,33 +24,16 @@ docker-compose up -d
 docker-compose exec tweeter-infra bash
 ```
 
-## Working with the Local environment
-We manage the local environment via docker-compose, therefore you should not be inside
-the docker container which you would use for working with other environments.
-
-All you need to do is cd in the `local` folder and docker-compose up.
+## Provisioning the application
+First, initialize terraform:
 ```
-cd local
-docker-compose up -d
-```
-
-### Updating the image (pulling `latest`)
-To get the latest version pushed to DockerHub, use:
-```
-docker-compose pull
-```
-
-Or, if you want to use a custom version on DockerHub or even in your local images, you can change the tag in the docker-compose.yml file directly.
-
-## Working with the Remote environment
-First, cd into the `remote` folder and initialize terraform:
-```
-cd remote
 terraform init
 ```
 
 ### Using workspaces
-We use workspaces to manage separate versions of the application deployed to the remote backend. To start with, you can create your own personal workspace:
+We use workspaces to manage separate versions of the infrastructure being deployed. These different
+'instances' of the infrastructure also allow us to deploy different versions of applications / services.
+To start with, you can create your own personal workspace:
 ```
 # Use your own name here
 terraform workspace new [darren]

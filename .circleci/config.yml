@@ -6,31 +6,17 @@ orbs:
   persist-env: christeredvartsen/persist-env@0.1.0
 
 jobs:
-  check-healthcheck-on-local:
-    machine: true
-    steps:
-      - checkout
-      - run: cd local; docker-compose up -d
-      # These lines are for debugging in case a container died
-      - run: cd local; docker-compose ps
-      - run: cd local; docker-compose logs
-      - docker/install-dockerize
-      # Check that server accepts /healthcheck
-      - dockerize/wait-http:
-          host: localhost
-          path: /healthcheck
-          port: 8000
-  check-healthcheck-on-remote:
+  check-healthcheck-on-deployed-instance:
     machine: true
     steps:
       - checkout
       - run: docker-compose up -d
       # Manually inject variables from environment since docker-compose
       # does not inherit environment variables
-      - run: echo "do_token = \"$TF_VAR_do_token\"" >> remote/secrets.auto.tfvars
-      - run: echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> remote/secrets.auto.tfvars
-      - run: echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> remote/secrets.auto.tfvars
-      - run: echo "cf_token = \"$TF_VAR_cf_token\"" >> remote/secrets.auto.tfvars
+      - run: echo "do_token = \"$TF_VAR_do_token\"" >> ./secrets.auto.tfvars
+      - run: echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> ./secrets.auto.tfvars
+      - run: echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> ./secrets.auto.tfvars
+      - run: echo "cf_token = \"$TF_VAR_cf_token\"" >> ./secrets.auto.tfvars
       # Get the public ssh key in a file so we can add to new hosts
       - run: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
       - persist-env/set-env-var:
@@ -39,7 +25,6 @@ jobs:
       # Create infrastructure
       - run: |
           docker-compose exec tweeter-infra bash -c "
-            cd remote;
             terraform workspace new $WORKSPACE_NAME;
             terraform init;
             terraform apply -auto-approve;"
@@ -56,7 +41,6 @@ jobs:
           command: |
             docker-compose up -d;
             docker-compose exec tweeter-infra bash -c "
-              cd remote;
               terraform destroy -auto-approve;"
           when: always
 
@@ -64,5 +48,4 @@ workflows:
   version: 2
   build:
     jobs:
-      - check-healthcheck-on-local
-      - check-healthcheck-on-remote
+      - check-healthcheck-on-deployed-instance
