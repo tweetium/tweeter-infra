@@ -1,58 +1,18 @@
 - hosts: all
+  vars:
+    nomad_debug: true
+    nomad_group_name: all
+    nomad_node_role: both
+
   pre_tasks:
-    # apt-get update required to find deps like python-pip in package lists
+    # apt-get update required to find dependencies like cgroup-bin in package lists
     - name: Run 'apt-get update'
       apt:
-        # Install python-pip here instead of waiting for
-        # pip role to install, it's slightly faster (~10 secs)
-        name: python-pip
         update_cache: true
 
   roles:
-    - docker
+    - brianshumate.nomad
 
-  post_tasks:
-    - name: Create tweeter network
-      docker_network:
-        name: tweeter
-
-
-# After network is installed
-- hosts: all
-  vars:
-    do_volumes:
-      - name: "{{ terraform_workspace}}-main"
-    docker_volumes:
-      - name: grafana-data
-      - name: postgres-data
-    docker_containers:
-      - name: grafana
-        image: grafana/grafana:6.0.2
-        volumes:
-          - grafana-data:/var/lib/grafana
-        networks:
-          - name: tweeter
-      - name: tweeter-backend-postgres
-        image: postgres:11.1
-        volumes:
-          - postgres-data:/var/lib/postgresql/data
-        networks:
-          - name: tweeter
-      - name: tweeter-backend
-        image: tweetium/tweeter-backend:latest
-        volumes:
-          - grafana-data:/var/lib/grafana
-        ports:
-          - 80:80
-        networks:
-          - name: tweeter
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@tweeter-backend-postgres:5432/postgres?sslmode=disable
-          # JWT is used for user sessions, this map is defined for JWT rotation.
-          JWT_SECRETS_MAP: |
-            { "0": "4e054f2e-7436-4525-8fc6-d5801d483697" }
-          JWT_SECRETS_CURRENT_KEY: "0"
-
-  roles:
-    - do-mount-volume
-    - tweeter-docker-services
+  tasks:
+    - name: Start nomad
+      service: name=nomad state=started enabled=yes

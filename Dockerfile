@@ -1,9 +1,17 @@
 FROM williamyeh/ansible:ubuntu18.04-onbuild
 
-RUN ansible-galaxy install geerlingguy.docker geerlingguy.pip
+RUN apt-get update && apt-get install -y \
+  # Needed locally for brianshumate.nomad role.
+  python3 \
+  # Needed to install netaddr, etc.
+  python-pip
+
+RUN pip install netaddr
+
+RUN ansible-galaxy install brianshumate.nomad
 
 # Install the terraform binary
-RUN apt-get install -y unzip wget && \
+RUN apt-get update && apt-get install -y unzip wget && \
   wget https://releases.hashicorp.com/terraform/0.12.13/terraform_0.12.13_linux_amd64.zip && \
   unzip terraform_0.12.13_linux_amd64.zip && \
   mv terraform /usr/local/bin/terraform && \
