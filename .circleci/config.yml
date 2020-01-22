@@ -30,6 +30,7 @@ jobs:
             terraform init;
             terraform import digitalocean_ssh_key.main $DO_SSH_KEY_ID;
             terraform apply -auto-approve;
+            sleep 5;    # Give time for nomad cluster to bootstrap.
             nomad run jobs/tweeter-backend.nomad"
       - docker/install-dockerize
       # Check that server accepts /healthcheck
