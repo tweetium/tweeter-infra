@@ -13,7 +13,3 @@
   roles:
     - docker
     - brianshumate.nomad
-
-  tasks:
-    - name: Start nomad
-      service: name=nomad state=started enabled=yes
