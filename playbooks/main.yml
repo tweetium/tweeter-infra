@@ -12,6 +12,7 @@
 
   roles:
     - brianshumate.nomad
+    - docker
 
   tasks:
     - name: Start nomad
