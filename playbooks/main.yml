@@ -11,8 +11,8 @@
         update_cache: true
 
   roles:
-    - brianshumate.nomad
     - docker
+    - brianshumate.nomad
 
   tasks:
     - name: Start nomad
