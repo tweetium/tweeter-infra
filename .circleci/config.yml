@@ -23,13 +23,14 @@ jobs:
       # This is not used since we import the ssh_key, but terraform
       # will complain if it is not a valid key.
       - run: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
-      # Create infrastructure
+      # Create infrastructure, run jobs
       - run: |
           docker-compose exec tweeter-infra bash -c "
             terraform workspace new $WORKSPACE_NAME;
             terraform init;
             terraform import digitalocean_ssh_key.main $DO_SSH_KEY_ID;
-            terraform apply -auto-approve;"
+            terraform apply -auto-approve;
+            nomad run jobs/tweeter-backend.nomad"
       - docker/install-dockerize
       # Check that server accepts /healthcheck
       - dockerize/wait-http:
