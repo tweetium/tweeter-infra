@@ -17,16 +17,18 @@ jobs:
       - run: echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> ./secrets.auto.tfvars
       - run: echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> ./secrets.auto.tfvars
       - run: echo "cf_token = \"$TF_VAR_cf_token\"" >> ./secrets.auto.tfvars
-      # Get the public ssh key in a file so we can add to new hosts
-      - run: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
       - persist-env/set-env-var:
           var-name: WORKSPACE_NAME
           var-value: ci-$CIRCLE_SHA1-$CIRCLE_BUILD_NUM
+      # This is not used since we import the ssh_key, but terraform
+      # will complain if it is not a valid key.
+      - run: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
       # Create infrastructure
       - run: |
           docker-compose exec tweeter-infra bash -c "
             terraform workspace new $WORKSPACE_NAME;
             terraform init;
+            terraform import digitalocean_ssh_key.main $DO_SSH_KEY_ID;
             terraform apply -auto-approve;"
       - docker/install-dockerize
       # Check that server accepts /healthcheck
