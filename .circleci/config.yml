@@ -38,11 +38,12 @@ jobs:
           # Due to Cloudflare record creation, may not be accessible
           # until around ~20-30 seconds after provisioning.
           timeout: "60s"
-      # Always cleanup infrastructure
+      # Always cleanup infrastructure, don't destroy ssh key
       - run:
           command: |
             docker-compose up -d;
             docker-compose exec tweeter-infra bash -c "
+              terraform state rm 'digitalocean_ssh_key.main';
               terraform destroy -auto-approve;"
           when: always
 
