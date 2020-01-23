@@ -16,7 +16,7 @@
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "../playbooks/main.yml",
+      "playbook_file": "./playbooks/main.yml",
       "extra_arguments": [
         "-e ansible_python_interpreter=/usr/bin/python3"
       ]
