@@ -1,7 +1,6 @@
 {
   "variables": {
-    "do_api_token": null,
-    "workspace": null
+    "do_api_token": null
   },
   "builders": [
     {
@@ -11,7 +10,7 @@
       "region": "sfo2",
       "size": "s-1vcpu-1gb",
       "ssh_username": "root",
-      "snapshot_name": "{{user `workspace`}}-main"
+      "snapshot_name": "main"
     }
   ],
   "provisioners": [
