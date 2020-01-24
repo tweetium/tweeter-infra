@@ -26,6 +26,12 @@ RUN apt-get update && apt-get install -y unzip wget && \
   mv /tmp/downloads/nomad /usr/local/bin/nomad-real && \
   rm nomad_0.10.2_linux_amd64.zip
 
+# Install the packer binary
+RUN wget https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_linux_amd64.zip && \
+  unzip packer_1.5.1_linux_amd64.zip && \
+  mv packer /usr/local/bin/packer && \
+  rm packer_1.5.1_linux_amd64.zip
+
 # Install mitogen, an ansible plugin used for speedup.
 RUN wget https://networkgenomics.com/try/mitogen-0.2.9.tar.gz && \
   tar -xf mitogen-0.2.9.tar.gz && \

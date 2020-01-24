@@ -3,10 +3,8 @@ provider "digitalocean" {
   token   = "${var.do_token}"
 }
 
-resource "digitalocean_volume" "main" {
-  name   = "${terraform.workspace}-main"
-  region = "sfo2"
-  size   = 1
+data "digitalocean_image" "main" {
+  name = "main"
 }
 
 # This ssh key may exist if you are managing multiple workspaces. To import this value, you
@@ -18,15 +16,10 @@ resource "digitalocean_ssh_key" "main" {
 
 resource "digitalocean_droplet" "main" {
   name     = "${terraform.workspace}-main"
-  image    = "ubuntu-18-04-x64"
+  image    = data.digitalocean_image.main.id
   region   = "sfo2"
   size     = "s-1vcpu-1gb"
   ssh_keys = ["${digitalocean_ssh_key.main.fingerprint}"]
-}
-
-resource "digitalocean_volume_attachment" "main" {
-  droplet_id = "${digitalocean_droplet.main.id}"
-  volume_id  = "${digitalocean_volume.main.id}"
 
   # Ensure that we can connect to the droplet via ssh before running ansible.
   provisioner "remote-exec" {
@@ -42,14 +35,14 @@ resource "digitalocean_volume_attachment" "main" {
   provisioner "local-exec" {
     # Extra comma in inventory is necessary for inventory (comma separated list)
     # ansible_python_interpretor is necessary because of Ubuntu Xenial: https://github.com/ansible/ansible/issues/19605
-    command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3' -e 'terraform_workspace=${terraform.workspace}' ./playbooks/main.yml"
+    command = "ansible-playbook --inventory '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3' --skip-tags installation ./playbooks/setup.yml"
   }
 }
 
 resource "digitalocean_project" "project" {
   name        = "${terraform.workspace}-tweeter"
   environment = "Development"
-  resources   = [digitalocean_droplet.main.urn, digitalocean_volume.main.urn]
+  resources   = [digitalocean_droplet.main.urn]
 }
 
 provider "cloudflare" {

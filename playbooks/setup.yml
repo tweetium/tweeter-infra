@@ -1,0 +1,9 @@
+- hosts: all
+  vars:
+    # This should match the variables used in snapshot.yml
+    nomad_debug: true
+    nomad_group_name: all
+    nomad_node_role: both
+
+  roles:
+    - brianshumate.nomad
