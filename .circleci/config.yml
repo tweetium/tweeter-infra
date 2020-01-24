@@ -14,10 +14,13 @@ jobs:
       - run: docker-compose up -d
       # Manually inject variables from environment since docker-compose
       # does not inherit environment variables
-      - run: echo "do_token = \"$TF_VAR_do_token\"" >> ./secrets.auto.tfvars
-      - run: echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> ./secrets.auto.tfvars
-      - run: echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> ./secrets.auto.tfvars
-      - run: echo "cf_token = \"$TF_VAR_cf_token\"" >> ./secrets.auto.tfvars
+      - run:
+          name: Inject tf variables into file from environment
+          command: |
+            echo "do_token = \"$TF_VAR_do_token\"" >> ./secrets.auto.tfvars;
+            echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> ./secrets.auto.tfvars;
+            echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> ./secrets.auto.tfvars;
+            echo "cf_token = \"$TF_VAR_cf_token\"" >> ./secrets.auto.tfvars;
       - persist-env/set-env-var:
           var-name: WORKSPACE_NAME
           var-value: ci-$CIRCLE_SHA1-$CIRCLE_BUILD_NUM
