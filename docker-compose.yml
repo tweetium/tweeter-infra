@@ -3,13 +3,11 @@ version: "3.2"
 services:
   tweeter-infra:
     container_name: tweeter-infra
-    build: ./
+    image: darrentsung/tweeter-infra:v1
     environment:
-      ANSIBLE_CONFIG: /ansible/ansible.cfg
-      ANSIBLE_INVENTORY: /ansible/hosts.yaml
+      ANSIBLE_CONFIG: /infra/ansible.cfg
     volumes:
-      - .:/ansible
+      - .:/infra
       - ~/.ssh:/root/.ssh
-    working_dir: /ansible
     # Keep container open
-    command: tail -F /ansible/ansible.cfg
+    command: tail -F /dev/urandom

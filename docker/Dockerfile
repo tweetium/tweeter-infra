@@ -38,5 +38,7 @@ RUN wget https://networkgenomics.com/try/mitogen-0.2.9.tar.gz && \
   rm mitogen-0.2.9.tar.gz && \
   mv mitogen-0.2.9 /usr/lib/
 
+WORKDIR /infra
+
 # Add alias for `nomad` which routes to nomad.sh in scripts
-RUN ln -s /ansible/scripts/nomad.sh /usr/local/bin/nomad
+RUN ln -s /infra/scripts/nomad.sh /usr/local/bin/nomad

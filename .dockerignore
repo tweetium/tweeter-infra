@@ -1,7 +1,0 @@
-Dockerfile
-
-# All these folders will be mounted through docker-compose later,
-# not needed as context (and can conflict with naming, eg. packer).
-packer/
-jobs/
-playbooks/
