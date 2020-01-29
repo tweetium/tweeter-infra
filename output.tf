@@ -8,3 +8,8 @@ output "nomad_ipv4_address" {
   value       = "http://${digitalocean_droplet.main.ipv4_address}:4646"
   description = "The ipv4 address where nomad can be accessed on."
 }
+
+output "ansible_helper" {
+  value = "ansible-playbook -i '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3'"
+  description = "A helper for running playbooks on the main droplet"
+}

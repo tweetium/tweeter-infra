@@ -14,3 +14,7 @@
 
 # Ansible retry files
 *.retry
+
+# packer var-file
+# TODO: this should be replaced with Vault secrets eventually
+secrets.packer.json

@@ -3,7 +3,7 @@ version: "3.2"
 services:
   tweeter-infra:
     container_name: tweeter-infra
-    image: darrentsung/tweeter-infra:v1
+    image: darrentsung/tweeter-infra:v2
     environment:
       ANSIBLE_CONFIG: /infra/ansible.cfg
     volumes:

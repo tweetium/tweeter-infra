@@ -12,6 +12,10 @@
     nomad_bind_address: 9.9.9.9
     nomad_advertise_address: 9.9.9.9
 
+    consul_group_name: all
+    consul_node_role: server
+    consul_bootstrap_expect: true
+
 
   pre_tasks:
     # apt-get update required to find dependencies like cgroup-bin in package lists
@@ -21,4 +25,5 @@
 
   roles:
     - docker
+    - brianshumate.consul
     - brianshumate.nomad
