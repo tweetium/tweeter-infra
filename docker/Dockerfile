@@ -4,11 +4,13 @@ RUN apt-get update && apt-get install -y \
   # Needed locally for brianshumate.nomad role.
   python3 \
   # Needed to install netaddr, etc.
-  python-pip
+  python-pip \
+  # Needed to use pip module, see:
+  # https://github.com/ansible/ansible/issues/47361#issuecomment-431705748
+  python3-pip \
+  curl
 
 RUN pip install netaddr
-
-RUN ansible-galaxy install brianshumate.nomad geerlingguy.docker geerlingguy.pip
 
 # Install the terraform and nomad binary
 RUN apt-get update && apt-get install -y unzip wget && \
@@ -37,6 +39,13 @@ RUN wget https://networkgenomics.com/try/mitogen-0.2.9.tar.gz && \
   tar -xf mitogen-0.2.9.tar.gz && \
   rm mitogen-0.2.9.tar.gz && \
   mv mitogen-0.2.9 /usr/lib/
+
+# Install 3rd-party roles
+RUN ansible-galaxy install \
+  brianshumate.nomad \
+  brianshumate.consul \
+  geerlingguy.docker \
+  geerlingguy.pip
 
 WORKDIR /infra
 

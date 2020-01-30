@@ -4,6 +4,16 @@
     nomad_debug: true
     nomad_group_name: all
     nomad_node_role: both
+    nomad_use_consul: true
+    # We shouldn't need to set this, but if we set nomad_use_consul, then this
+    # will default to 3 because `nomad_servers` is set to empty:
+    # https://github.com/brianshumate/ansible-nomad/blob/abec35d8e8b0b8569edde00a5e5d6fe892e0ce44/defaults/main.yml#L93
+    nomad_bootstrap_expect: 1
+
+    consul_group_name: all
+    consul_node_role: server
+    consul_bootstrap_expect: true
 
   roles:
+    - brianshumate.consul
     - brianshumate.nomad
