@@ -1,5 +1,8 @@
 - hosts: all
   vars:
+    # Necessary because of Ubuntu Xenial: https://github.com/ansible/ansible/issues/19605
+    ansible_python_interpreter: /usr/bin/python3
+
     # This should match the variables used in snapshot.yml
     nomad_debug: true
     nomad_group_name: all
