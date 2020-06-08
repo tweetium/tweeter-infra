@@ -4,7 +4,7 @@ provider "digitalocean" {
 }
 
 data "digitalocean_image" "main" {
-  name = "main-with-consul"
+  name = "main"
 }
 
 # This ssh key may exist if you are managing multiple workspaces. To import this value, you
