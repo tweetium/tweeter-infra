@@ -7,6 +7,7 @@ services:
     environment:
       ANSIBLE_CONFIG: /infra/ansible.cfg
     volumes:
+      - ./docker/.bashrc:/root/.bashrc
       - .:/infra
       - ~/.ssh:/root/.ssh
     # Keep container open

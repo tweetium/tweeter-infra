@@ -11,7 +11,7 @@ data "digitalocean_image" "main" {
 # should use the API, see: https://developers.digitalocean.com/documentation/v2/#ssh-keys
 resource "digitalocean_ssh_key" "main" {
   name       = "${var.do_ssh_key_name}"
-  public_key = file("/root/.ssh/id_rsa.pub")
+  public_key = file("/root/.ssh/${var.ssh_key_name}.pub")
 }
 
 resource "digitalocean_droplet" "main" {
@@ -28,7 +28,7 @@ resource "digitalocean_droplet" "main" {
       type        = "ssh"
       user        = "root"
       host        = "${digitalocean_droplet.main.ipv4_address}"
-      private_key = "${file("/root/.ssh/id_rsa")}"
+      agent       = true
     }
   }
 
