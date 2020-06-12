@@ -1,6 +1,6 @@
 provider "digitalocean" {
   version = "~> 1.6"
-  token   = "${var.do_token}"
+  token   = var.do_token
 }
 
 data "digitalocean_image" "main" {
@@ -10,7 +10,7 @@ data "digitalocean_image" "main" {
 # This ssh key may exist if you are managing multiple workspaces. To import this value, you
 # should use the API, see: https://developers.digitalocean.com/documentation/v2/#ssh-keys
 resource "digitalocean_ssh_key" "main" {
-  name       = "${var.do_ssh_key_name}"
+  name       = var.do_ssh_key_name
   public_key = file("/root/.ssh/${var.ssh_key_name}.pub")
 }
 
@@ -19,7 +19,7 @@ resource "digitalocean_droplet" "main" {
   image    = data.digitalocean_image.main.id
   region   = "sfo2"
   size     = "s-1vcpu-1gb"
-  ssh_keys = ["${digitalocean_ssh_key.main.fingerprint}"]
+  ssh_keys = [digitalocean_ssh_key.main.fingerprint]
 
   # Ensure that we can connect to the droplet via ssh before running ansible.
   provisioner "remote-exec" {
@@ -27,7 +27,7 @@ resource "digitalocean_droplet" "main" {
     connection {
       type  = "ssh"
       user  = "root"
-      host  = "${digitalocean_droplet.main.ipv4_address}"
+      host  = digitalocean_droplet.main.ipv4_address
       agent = true
     }
   }
