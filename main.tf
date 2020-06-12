@@ -45,14 +45,13 @@ resource "digitalocean_project" "project" {
   resources   = [digitalocean_droplet.main.urn]
 }
 
-provider "cloudflare" {
-  version   = "~> 2.0"
-  api_token = "${var.cf_token}"
+data "digitalocean_domain" "tweeter_dev" {
+  name        = "tweeter.dev"
 }
 
-resource "cloudflare_record" "main" {
-  zone_id = var.cf_zone_id
-  name    = "${terraform.workspace}"
-  value   = "${digitalocean_droplet.main.ipv4_address}"
-  type    = "A"
+resource "digitalocean_record" "main" {
+  domain      = data.digitalocean_domain.tweeter_dev.name
+  type        = "A"
+  name        = terraform.workspace
+  value       = digitalocean_droplet.main.ipv4_address
 }
