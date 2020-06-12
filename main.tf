@@ -25,10 +25,10 @@ resource "digitalocean_droplet" "main" {
   provisioner "remote-exec" {
     inline = ["true"]
     connection {
-      type        = "ssh"
-      user        = "root"
-      host        = "${digitalocean_droplet.main.ipv4_address}"
-      agent       = true
+      type  = "ssh"
+      user  = "root"
+      host  = "${digitalocean_droplet.main.ipv4_address}"
+      agent = true
     }
   }
 
@@ -46,12 +46,12 @@ resource "digitalocean_project" "project" {
 }
 
 data "digitalocean_domain" "tweeter_dev" {
-  name        = "tweeter.dev"
+  name = "tweeter.dev"
 }
 
 resource "digitalocean_record" "main" {
-  domain      = data.digitalocean_domain.tweeter_dev.name
-  type        = "A"
-  name        = terraform.workspace
-  value       = digitalocean_droplet.main.ipv4_address
+  domain = data.digitalocean_domain.tweeter_dev.name
+  type   = "A"
+  name   = terraform.workspace
+  value  = digitalocean_droplet.main.ipv4_address
 }

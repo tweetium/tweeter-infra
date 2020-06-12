@@ -10,6 +10,6 @@ output "nomad_ipv4_address" {
 }
 
 output "ansible_helper" {
-  value = "ansible-playbook -i '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3'"
+  value       = "ansible-playbook -i '${digitalocean_droplet.main.ipv4_address},' -e 'ansible_python_interpreter=/usr/bin/python3'"
   description = "A helper for running playbooks on the main droplet"
 }
