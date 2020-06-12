@@ -30,6 +30,7 @@ jobs:
       # Create infrastructure, run jobs
       - run: |
           docker-compose exec tweeter-infra bash -c "
+            source ~/.bashrc;
             terraform workspace new $WORKSPACE_NAME;
             terraform init;
             terraform import digitalocean_ssh_key.main $DO_SSH_KEY_ID;
