@@ -1,17 +1,17 @@
 provider "digitalocean" {
   version = "~> 1.6"
-  token   = "${var.do_token}"
+  token   = var.do_token
 }
 
 data "digitalocean_image" "main" {
-  name = "main-with-consul"
+  name = "main"
 }
 
 # This ssh key may exist if you are managing multiple workspaces. To import this value, you
 # should use the API, see: https://developers.digitalocean.com/documentation/v2/#ssh-keys
 resource "digitalocean_ssh_key" "main" {
-  name       = "${var.do_ssh_key_name}"
-  public_key = file("/root/.ssh/id_rsa.pub")
+  name       = var.do_ssh_key_name
+  public_key = file("/root/.ssh/${var.ssh_key_name}.pub")
 }
 
 resource "digitalocean_droplet" "main" {
@@ -19,16 +19,16 @@ resource "digitalocean_droplet" "main" {
   image    = data.digitalocean_image.main.id
   region   = "sfo2"
   size     = "s-1vcpu-1gb"
-  ssh_keys = ["${digitalocean_ssh_key.main.fingerprint}"]
+  ssh_keys = [digitalocean_ssh_key.main.fingerprint]
 
   # Ensure that we can connect to the droplet via ssh before running ansible.
   provisioner "remote-exec" {
     inline = ["true"]
     connection {
-      type        = "ssh"
-      user        = "root"
-      host        = "${digitalocean_droplet.main.ipv4_address}"
-      private_key = "${file("/root/.ssh/id_rsa")}"
+      type  = "ssh"
+      user  = "root"
+      host  = digitalocean_droplet.main.ipv4_address
+      agent = true
     }
   }
 
@@ -45,14 +45,13 @@ resource "digitalocean_project" "project" {
   resources   = [digitalocean_droplet.main.urn]
 }
 
-provider "cloudflare" {
-  version   = "~> 2.0"
-  api_token = "${var.cf_token}"
+data "digitalocean_domain" "tweeter_dev" {
+  name = "tweeter.dev"
 }
 
-resource "cloudflare_record" "main" {
-  zone_id = var.cf_zone_id
-  name    = "${terraform.workspace}"
-  value   = "${digitalocean_droplet.main.ipv4_address}"
-  type    = "A"
+resource "digitalocean_record" "main" {
+  domain = data.digitalocean_domain.tweeter_dev.name
+  type   = "A"
+  name   = terraform.workspace
+  value  = digitalocean_droplet.main.ipv4_address
 }

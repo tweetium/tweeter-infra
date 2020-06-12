@@ -19,8 +19,6 @@ jobs:
           command: |
             echo "do_token = \"$TF_VAR_do_token\"" >> ./secrets.auto.tfvars;
             echo "do_ssh_key_name = \"$TF_VAR_do_ssh_key_name\"" >> ./secrets.auto.tfvars;
-            echo "cf_zone_id = \"$TF_VAR_cf_zone_id\"" >> ./secrets.auto.tfvars;
-            echo "cf_token = \"$TF_VAR_cf_token\"" >> ./secrets.auto.tfvars;
       - persist-env/set-env-var:
           var-name: WORKSPACE_NAME
           var-value: ci-$CIRCLE_SHA1-$CIRCLE_BUILD_NUM
@@ -30,6 +28,7 @@ jobs:
       # Create infrastructure, run jobs
       - run: |
           docker-compose exec tweeter-infra bash -c "
+            source ~/.bashrc;
             terraform workspace new $WORKSPACE_NAME;
             terraform init;
             terraform import digitalocean_ssh_key.main $DO_SSH_KEY_ID;
@@ -44,7 +43,7 @@ jobs:
       - dockerize/wait-http:
           host: $WORKSPACE_NAME.tweeter.dev
           path: /healthcheck
-          # Due to Cloudflare record creation, may not be accessible
+          # Due to record creation, may not be accessible
           # until around ~20-30 seconds after provisioning.
           timeout: "60s"
       # Always cleanup infrastructure, don't destroy ssh key
